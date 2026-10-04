@@ -14,23 +14,26 @@ searchBtn.addEventListener("click", function () {
     })
     .then(function (data) {
       if (data.cod === 200) {
-        const temperature = data.main.temp;
+        const temperature = Math.round(data.main.temp);
         const condition = data.weather[0].description;
         const humidity = data.main.humidity;
+        const wind = data.wind.speed;
         const iconCode = data.weather[0].icon;
         const iconUrl = "https://openweathermap.org/img/wn/" + iconCode + "@2x.png";
         const now = new Date();
         const updatedTime = now.toLocaleTimeString();
 
         resultBox.innerHTML =
+          "<img src='" + iconUrl + "' alt=''>" +
           "<h2>" + data.name + "</h2>" +
-          "<img src='" + iconUrl + "' alt='" + condition + "'>" +
-          "<p>Temperature: " + temperature + "°C</p>" +
-          "<p>Condition: " + condition + "</p>" +
-          "<p>Humidity: " + humidity + "%</p>" +
+          "<p>" + temperature + "°C — " + condition + "</p>" +
+          "<div class='stats'>" +
+            "<div><div class='stat-value'>" + humidity + "%</div><div class='stat-label'>Humidity</div></div>" +
+            "<div><div class='stat-value'>" + wind + " km/h</div><div class='stat-label'>Wind Speed</div></div>" +
+          "</div>" +
           "<p class='updated'>Last updated: " + updatedTime + "</p>";
       } else {
-        resultBox.innerHTML = "<p>City not found. Please check the spelling and try again.</p>";
+        resultBox.innerHTML = "<p class='error'>City not found. Check the spelling and try again.</p>";
       }
     });
 });
